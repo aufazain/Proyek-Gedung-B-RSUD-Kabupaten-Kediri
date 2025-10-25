@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Proyek Gedung B RSUD Kabupaten Kediri</title>
+  <style>
+    body{
+      margin:0;
+      font-family: Arial, sans-serif;
+      background-color:#fff;
+      min-height: 100vh; /* Set tinggi minimal sebesar tinggi layar */
+      display: flex; /* Aktifkan Flexbox */
+      flex-direction: column; /* Tata elemen secara vertikal */
+    }
+    header{
+      background: linear-gradient(90deg,#ff9c3e,#ff6b00);
+      color:#fff;
+      padding:20px 30px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      box-shadow:0 2px 5px rgba(0,0,0,0.2);
+    }
+    .search-box input{
+      padding:8px;
+      border:none;
+      border-radius:5px;
+      width:250px;
+    }
+    .profile{display:flex;align-items:center;gap:10px;}
+    .profile img{width:40px;height:40px;border-radius:50%;}
+    .category{text-align:center;background-color:#ffffff;padding:20px 0;}
+    .buttons{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
+      gap:20px;
+      padding: 20px 20px 80px 20px; /* Nilai 80px ini menambahkan ruang di bagian bawah */
+      justify-items:center;
+      background-color:#ffffff;
+    }
+    .btn{
+      background: linear-gradient(145deg,#ff7a00,#ff5e00);
+      color:#000;border-radius:50%;width:90px;height:90px;
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      cursor:pointer;text-align:center;transition:all .2s ease;text-decoration:none;
+      box-shadow:0 3px 6px rgba(0,0,0,0.2);
+    }
+    .btn:hover{transform:scale(1.08);background:linear-gradient(145deg,#ff8c1a,#ff5e00);box-shadow:0 5px 10px rgba(0,0,0,0.3);}
+    .btn:active{transform:scale(0.96);background:linear-gradient(145deg,#ff6b00,#e65c00);}
+    .content{
+      text-align:center;padding:30px;background:linear-gradient(180deg,#ff944d,#ffb366);color:#fff;
+      transition:background-color .3s;
+      flex-grow: 1; /* Pastikan konten tumbuh untuk mengisi wrapper */;
+    }
+    /* CSS baru untuk gambar ikon di dalam tombol */
+    .btn img.button-icon {
+      width: 60px; /* Atur lebar ikon */
+      height: 60px; /* Atur tinggi ikon */
+      object-fit: contain; /* Pastikan gambar tidak terdistorsi */
+      margin-top: 30px; /* Beri sedikit jarak antara ikon dan teks */
+    }
+    .content img{
+      width: calc(100% + 60px); /* 100% + 30px padding kiri + 30px padding kanan */
+      max-width: calc(100% + 60px); /* Samakan dengan width */
+      margin-left: -30px; /* Geser gambar ke kiri untuk menutupi padding */
+      border-radius: 0; /* Hapus radius agar terlihat rata */
+      margin-top: 10px;
+    }
+    textarea{width:90%;height:150px;border:1px solid #ccc;border-radius:10px;padding:10px;resize:none;}
+
+    /* progress list */
+    .progress-list{
+      max-height:400px;
+      overflow-y:auto;
+      padding-right:10px;
+      text-align:left;
+    }
+    .progress-item{ width:90%; margin:8px auto 14px; }
+    .progress-label{ padding:6px 14px; font-weight:700; color:#fff; }
+    .progress-container{ background: rgba(255,255,255,0.18); border-radius:20px; overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,0.15); }
+    .progress-bar{ height:22px; background:linear-gradient(90deg,#00c853,#b2ff59); width:0%; border-radius:20px; transition:width 1.2s ease; }
+
+    /* stock & manpower table */
+    .stock-scroll{ max-height:400px; overflow-y:auto; margin-top:20px; background:rgba(255,255,255,0.95); border-radius:10px; padding:8px; box-shadow: inset 0 0 8px rgba(0,0,0,0.06); }
+    table.stock-table{ width:100%; border-collapse:collapse; min-width:800px; background:#fff; color:#222; }
+    table.stock-table th, table.stock-table td{ padding:8px 10px; border:1px solid #ddd; text-align:left; vertical-align:middle; }
+    table.stock-table th{ background: linear-gradient(90deg,#ff7a00,#ff5e00); color:#fff; position:sticky; top:0; z-index:2; }
+    @media (max-width:700px){
+      .buttons{ grid-template-columns:repeat(auto-fit,minmax(90px,1fr)); }
+      .search-box input{ width:140px; }
+    }
+    /* CSS untuk Footer */
+    #main-footer {
+      background-color: #ff6b00; /* Warna oranye tua */
+      color: #fff;
+      text-align: center;
+      padding: 15px 0; /* Padding atas dan bawah */
+      font-size: 0.9em;
+      box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+    }
+    #main-footer p {
+      margin: 4px 0; /* Mengatur jarak antar baris teks dalam footer */
+    }
+    /* Aturan baru untuk wrapper konten (Sticky Footer) */
+    #wrapper {
+      flex-grow: 1; /* Kontainer wrapper mengisi ruang vertikal yang tersisa */
+      display: flex;
+      flex-direction: column;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="profile">
+      <img src="images/profile.jpg" alt="User">
+      <div>
+        <strong>Proyek Gedung B RSUD Kabupaten Kediri</strong><br>
+        <small>USER</small>
+      </div>
+    </div>
+    <div class="search-box">
+      <input type="text" placeholder="Search here ...">
+    </div>
+  </header>
+
+  <div class="category"><h2>Category</h2></div>
+
+  <div class="buttons">
+    <a class="btn" href="#schedule" onclick="showContent('schedule')">
+      <img src="images/schedule-icon.png" alt="Schedule Icon" class="button-icon">
+      <br>Schedule
+    </a>
+    <a class="btn" href="#progress" onclick="showContent('progress')">
+      <img src="images/progress-icon.png" alt="Progress Icon" class="button-icon">
+      <br>Progress
+    </a>
+    <a class="btn" href="#stock" onclick="showContent('stock')">
+      <img src="images/stock-icon.png" alt="Stock Icon" class="button-icon">
+      <br>Stock
+    </a>
+    <a class="btn" href="#plan" onclick="showContent('plan')">
+      <img src="images/plan-icon.png" alt="Plan Icon" class="button-icon">
+      <br>Plan
+    </a>
+    <a class="btn" href="#question" onclick="showContent('question')">
+      <img src="images/question-icon.png" alt="Question Icon" class="button-icon">
+      <br>Question
+    <a class="btn" href="#manpower" onclick="showContent('manpower')">
+      <img src="images/manpower-icon.png" alt="Manpower Icon" class="button-icon">
+      <br>Manpower
+    </a>
+  </div>
+
+  <div id="wrapper">
+    <div id="content" class="content">
+      <p>Pilih salah satu kategori di atas untuk melihat konten.</p>
+    </div>
+  </div>
+
+  <script>
+    // FULL progress list (exact as provided)
+    const progressItems = [
+"PEKERJAAN PENDAHULUAN",
+"PEKERJAAN PERSIAPAN",
+"PEKERJAAN SISTEM MANAJEMEN KESELAMATAN KONSTRUKSI (SMKK)",
+"PEKERJAAN TANAH",
+"PEKERJAAN GALIAN TANAH",
+"PEKERJAAN URUGAN TANAH",
+"PEKERJAAN STRUKTUR",
+"PEKERJAAN STRUKTUR LT - BASEMENT",
+"PEKERJAAN STRUKTUR BAWAH",
+"Pek. Struktur (Elev.- 6.000) Lift",
+"PEKERJAAN STRUKTUR ATAS",
+"Pek. Struktur Bangunan Gedung",
+"Pek. Struktur Lift -1",
+"Pek. Sumpit Air Hujan",
+"Pek. Sumpit Air Kotor",
+"Pek. Tangga (dari BS sampai ke LT - Atap)",
+"PEKERJAAN STRUKTUR LT - 1",
+"PEKERJAAN STRUKTUR LT - 2",
+"PEKERJAAN STRUKTUR BANGUNAN",
+"PEKERJAAN STRUKTUR ENTRANCE",
+"PEKERJAAN STRUKTUR LT - 3",
+"PEKERJAAN STRUKTUR LT - 4",
+"PEKERJAAN STRUKTUR LT - ATAP",
+"STRUKTUR LT - ATAP",
+"STRUKTUR KANOPI -1",
+"STRUKTUR KANOPI -2 (2 UNIT)",
+"PEKERJAAN STRUKTUR LT. -ATAP & MESIN LIFT",
+"PEKERJAAN ARSITEKTUR",
+"PEKERJAAN ARSITEKTUR LT - BASEMENT",
+"PEKERJAAN PASANGAN DINDING",
+"PEKERJAAN PENUTUP LANTAI",
+"PEKERJAAN PLAFOND",
+"PEKERJAAN PENGADAAN DAN PEMASANGAN KUSEN PINTU JENDELA",
+"PEKERJAAN PENUNJANG DINDING CORNER  DAN RAILLING TANGGA",
+"PEKERJAAN PENGADAAN DAN PEMASANGAN LOGO & LETTER SIGNAGE",
+"PEKERJAAN ARSITEKTUR LT - 1",
+"PEKERJAAN PASANGAN DINDING",
+"PEKERJAAN FINISHING DINDING",
+"PEKERJAAN PENUTUP LANTAI",
+"PEKERJAAN PLAFOND",
+"PEKERJAAN PENGADAAN DAN PEMASANGAN KUSEN PINTU JENDELA",
+"PEKERJAAN FINISHING DINDING",
+"PEKERJAAN PENUTUP LANTAI",
+"PEKERJAAN PLAFOND",
+"PEKERJAAN PENGADAAN DAN PEMASANGAN KUSEN PINTU JENDELA",
+"PEKERJAAN PENUNJANG DINDING CORNER  DAN RAILLING TANGGA",
+"PEKERJAAN ARSITEKTUR LT - 3",
+"PEKERJAAN PASANGAN DINDING",
+"PEKERJAAN FINISHING DINDING",
+"PEKERJAAN PENUTUP LANTAI",
+"PEKERJAAN PLAFOND",
+"PEKERJAAN PENGADAAN DAN PEMASANGAN KUSEN PINTU JENDELA",
+"PEKERJAAN PENUNJANG DINDING CORNER  DAN RAILLING TANGGA",
+"PEKERJAAN ARSITEKTUR LT - 4",
+"PEKERJAAN PASANGAN DINDING",
+"PEKERJAAN FINISHING DINDING",
+"PEKERJAAN PENUTUP LANTAI",
+"PEKERJAAN PLAFOND",
+"PEKERJAAN PENGADAAN DAN PEMASANGAN KUSEN PINTU JENDELA",
+"PEKERJAAN PENUNJANG DINDING CORNER  DAN RAILLING TANGGA",
+"PEKERJAAN ARSITEKTUR LT - ATAP",
+"PEKERJAAN PASANGAN DINDING",
+"PEKERJAAN FINISHING DINDING",
+"PEKERJAAN PENUTUP LANTAI",
+"PEKERJAAN PLAFOND",
+"PEKERJAAN PENGADAAN DAN PEMASANGAN KUSEN PINTU JENDELA",
+"PEKERJAAN PENUNJANG DINDING CORNER  DAN RAILLING TANGGA",
+"PEKERJAAN ARSITEKTUR LT. -ATAP & MESIN LIFT",
+"PEKERJAAN PASANGAN DINDING",
+"PEKERJAAN FINISHING DINDING",
+"PEKERJAAN PENUTUP LANTAI",
+"PEKERJAAN PLAFOND",
+"PEKERJAAN PENGADAAN DAN PEMASANGAN KUSEN PINTU JENDELA"
+    ];
+
+    // FULL stock list (exact as provided). each entry: [item, satuan]
+    const stockItems = [
+["Pasir Beton","m³"],
+["Pasir Beton","kg"],
+["Pasir pasang","m3"],
+["Pasir urug","m³"],
+["Tanah Urug","m3"],
+["Batu Belah 10/15 cm","m³"],
+["Batu Belah15/20 cm","m³"],
+["PC / semen portland","kg"],
+["Air","ltr"],
+["Kerikil","m3"],
+["Kerikil","kg"],
+["Bata Merah","Buah"],
+["Seng Plat (BJLS 27 (0,02x80x180) cm)","Lembar"],
+["Bata Ringan Tebal 10 cm","Buah"],
+["Semen Warna","kg"],
+["Keramik Uk. 60x120cm","m2"],
+["Keramik Uk. 30x60cm Kamar Mandi","Buah"],
+["Granit tile 60 x 60 cm Polish","buah"],
+["Granit tile 40 40","buah"],
+["granit plint 60","buah"],
+["granit plint 40","buah"],
+["granit 120 30 tangga","buah"],
+["Keramik 30x30 putih glossy","buah"],
+["stepnosing 60 cm","buah"],
+["Paving Blok K-250, t : 8cm Yang Diproduksi dengan pasir Lokal","m2"],
+["Cat dasar (cat tembok interior) Catylac Primer Interior Alkali","Kg"],
+["Cat penutup dinding interior Catylac","Kg"],
+["Plamir Tembok","Kg"],
+["Cat Plafond Catylac","Kg"],
+["Waterproofing Membran Bakar","m2"],
+["Minyak bekisting","ltr"],
+["Cairan Primer","Kg"],
+["Cat zincromate propan cat 291","Kg"],
+["Waterproofing Coating","kg"],
+["Cat Dasar Plafon","kg"],
+["Gamma Paint","kg"],
+["Kaca 5mm","m2"],
+["Sekrup Fixer Kusen Alumunium","Buah"],
+["Silicone Sealant 300 ml","Tube"],
+["Silicone Sealant 600 ml","Tube"],
+["Sealant","tube"],
+["Slot pintu","buah"],
+["Kunci Pintu Slot  Lantai","buah"],
+["Engsel Pintu 4 inch (harga perset)","buah"],
+["HPLFormika 120 x 240","m2"],
+["Kaca Bening 3 mm","m2"],
+["kaca 6mm","m2"],
+["List Gypsum 15 cm","m'"],
+["Profil Kaca Panasap Green 5mm","m2"],
+["Kaca Polos 5mm","m2"],
+["plat alumunium","m2"],
+["profil alumunium","m"],
+["Kunci tanam biasa","buah"],
+["Engsel Pintu Tanam Dorma","buah"],
+["Kaca Polos Asahimas 10 mm","m2"],
+["profil stainless steel","m"],
+["plat stainless steel","m2"],
+["Stiker Kaca","m"],
+["Seal Karet","m"],
+["Pintu Tahan Api","Buah"],
+["shadow line","m"],
+["Kompound untuk dinding partisi","kg"],
+["Gypsumboard 12 mm","m2"],
+["Papan Kalsiboard 1220 x 2440 mm","m2"],
+["Penutup Atap Alderon","m2"],
+["Profil Allumunium metalfuring","m'"],
+["kawat las","kg"],
+["Paku Sekrup","kg"],
+["paku","kg"],
+["Semen ekspos","kg"],
+["PEKERJAAN FACADE",""],
+["Alumunium Composite Panel (ACP)","m2"],
+["Hallow Alumunium 40x40","m"],
+["Bracket Besi Siku 40x40","btg"],
+["Paku Skrup Beton","kg"],
+["Paku Skrup","kg"],
+["Sealant","tube"],
+["Kawat Diamater 4mm","kg"],
+["kalsiboard","m2"],
+["BJTP","kg"],
+["BJTS","kg"],
+["Plat Siku 75.75.8","kg"],
+["Plat baja 2mm","kg"],
+["Ikatan Angin Ø12\"","kg"],
+["Trakstang Ø10\"","m"],
+["Gording  CNP 150.65.20.3,2","kg"],
+["Besi baja IWF","kg"],
+["Jarum Keras M22","Kg"],
+["Baut HTB Ø 22 mm","m'"],
+["Angkur Ø 16 mm","m'"],
+["Baut M10 mm","m'"],
+["Steeldeck","m2"],
+["Seng Gelombang","Lbr"],
+["Wiremesh M8","m2"],
+["Kawat bendrat","kg"],
+["Besi Siku","m'"],
+["Cat Besi","kg"],
+["Papan Kayu kelas III","m3"],
+["Lisplank double woodplank","m'"],
+["Plywood Tebal 4 mm","Lebar"],
+["Kayu Mranti Kaso 5x7cm kelas III","m3"],
+["Kayu kelas III balok (meranti)","m3"],
+["Dolken kayu 8-10  panjang 4m","batang"],
+["spacer","buah"],
+["Multiplek tebal 9 mm ukuran 120 x 240","lembar"],
+["Multiplek tebal 12 mm (122x244)cm","lembar"],
+["Lem Kayu Crona","kg"],
+["Phenolic film 12mm","lembar"],
+["Paku 5-10 cm","Kg"],
+["Paku Sekrup 75 mm","Buah"],
+["Paku Triplek 2.5 cm","Kg"],
+["Paku Sekrup 2 cm gypsum","Kg"],
+["Plastik Cor / plastik rol butek ukuran 1m x 25m tebal 05","lembar"],
+["Plastik Cor / plastik rol butek ukuran 1m x 25m tebal 0,08","m2"],
+["mortar siap pakai","Kg"],
+["Mortar MU-301","Kg"],
+["Mortar MU-380","Kg"],
+["Beton Ready Mix K-400","m3"],
+["Beton Ready Mix K-275","m3"],
+["U-Ditch 40 x 40 x 120 x 10cm","buah"],
+["SIKA CHAPDUR NATURAL 25KG FLOOR HARDENER","kg"],
+["Bondek","m2"],
+["Kasin Car Stoper","bauh"],
+["Kloset Duduk","buah"],
+["Kloset Jongkok","buah"],
+["Flexibel Hose","buah"],
+["Urinoir","buah"],
+["Wastafel","buah"],
+["Kaca","buah"],
+["Kran Air","buah"],
+["Kran Air","Buah"],
+["Sealtape","buah"],
+["Flordrain","buah"],
+["Pekerjaan Railing","m"],
+["Pipa besi Stainles 3 inch 6M","BUAH"],
+["Pipa besi Stainless 2 inch 6M","BUAH"],
+["Pipa besi Stainless 1,5 inch 6M","BUAH"],
+["Cat zyncromate","kg"],
+["Kawat las","g"],
+["Isolasi","bh"],
+["Lasdop","bh"],
+["Panel Penerangan","unit"],
+["Panel AC","unit"],
+["Panel ATS","unit"],
+["Panel Kapasitor Bank","unit"],
+["Panel LVMDP","unit"],
+["Panel SDP","unit"],
+["Panel Elektronik","unit"],
+["Panel kontrol pompa transfer","unit"],
+["UPS 5 KVA","unit"],
+["Sumuran Grounding Arus Kuat tahanan max. 5 ohm c/w SDP s/d Panel sub distribusi","unit"],
+["Sumuran Grounding Arus Lemah tahanan max. 1 ohm c/w peralatan","unit"],
+["Kabel ITC 2X2X0,6","m"],
+["Conduit 20mm","m"],
+["Conduit 6mm","m"],
+["T dus","buah"],
+["Socket conduit 20mm","buah"],
+["klem 20mm","buah"],
+["Flexible conduit 20mm","buah"],
+["Flacher s6 sekrup","buah"],
+["Ceiling Speaker dan aksesoris","unit"],
+["Fix head detector addresable","unit"],
+["Fix head detector addresable","unit"],
+["Smoke detector konvesional","unit"],
+["Fix head detector addresable","unit"],
+["Kabel NYA 2 X 1,5 MM","m"],
+["Lamp indicator dan aksesoris","unit"],
+["Wall Speaker dan aksesoris","unit"],
+["Kabel UTP Cat 6","m"],
+["PIPA PVC AW ; Dia. 6\" ; dan aksesoris","m"],
+["Isolasi","m"],
+["PIPA PVC AW ; Dia. 4\" ; dan aksesoris","m"],
+["PIPA PVC AW ; Dia. 3\" ; dan aksesoris","m"],
+["PIPA PVC AW ; Dia. 2\" ; dan aksesoris","m"],
+["PIPA PVC AW ; Dia. 1\" ; dan aksesoris","m"],
+["Clean Out ; Dia. 2“ (50 mm) + Material Bantu","bh"],
+["Pipa PPR PN 10 Dia 1","m"],
+["Pipa PPRPN 10 Dia 3/4","m"],
+["Pipa PPRPN 10 Dia 2","m"],
+["Gate Valve dia 1","bh"],
+["Pompa Transfer 150","bh"],
+["Header Pipa PVC AW Dia 4","bh"],
+["Gate Valve Dia 3/4","bh"],
+["Kabel Power Kontrol AC dg Kabel NYM 3X2.5 mm Indoor s/d outdoor","m"],
+["Air Conditioner Split Wall 2 PK","buah"],
+["Pipa Refrigerant uk. 1/4\" dan 1/2\" lengkap terpasang dgn armaplek","m"],
+["Fitting + Supporting dan material bantu","ls"],
+["Pipa PPR PN Dia 1 1/4","m"],
+["Gate Valve Dia 1 1/4","bh"],
+["NYM 3 X 2,55","m'"],
+["PVC Conduit HI 20","m'"],
+["NYM 4 X 2,5","m'"],
+["Sutomatic Air Vent Dia 1/2","m'"],
+["Pompa booster 150 Ipm","unit"],
+["Gate valve Dia 2","unit"],
+["Header pipa PVC AW Dia 4","unit"],
+["Pipa PVC Dia 2","m'"],
+["Pipa PVC AW Dia 3/4","m'"],
+["Roofdrain Dia 4","unit"],
+["Tangga Monyet","Unit"]
+    ];
+
+    // helper to build progress HTML
+    function buildProgressHTML(){
+      return `<h3>Progress Pekerjaan</h3>
+        <div class="progress-list">` +
+        progressItems.map(p => `
+          <div class="progress-item">
+            <div class="progress-label">${p} - 0%</div>
+            <div class="progress-container"><div class="progress-bar" style="width:0%"></div></div>
+          </div>`).join('') +
+        `</div>`;
+    }
+
+    // helper to build stock HTML (all quantity 0)
+    function buildStockHTML(){
+      return `<h3>Daftar Stok Material</h3>
+        <div class="stock-scroll">
+          <table class="stock-table">
+            <thead>
+              <tr><th style="width:60px">No</th><th>Item</th><th style="width:140px">Satuan</th><th style="width:100px">Quantity</th></tr>
+            </thead>
+            <tbody>` +
+            stockItems.map((s,i)=>`<tr><td>${i+1}</td><td>${s[0]}</td><td>${s[1]||''}</td><td>0</td></tr>`).join('') +
+            `</tbody>
+          </table>
+        </div>`;
+    }
+
+    // helper to build manpower HTML (as table like stock)
+    function buildManpowerHTML(){
+      const manpower = [
+        "Pekerja",
+        "Mandor",
+        "Kepala Tukang",
+        "Tukang Batu",
+        "Tukang Kayu",
+        "Tukang Besi",
+        "Tukang Cat",
+        "Tukang pipa",
+        "Tukang Listrik"
+      ];
+      return `<h3>Manpower</h3>
+        <div class="stock-scroll">
+          <table class="stock-table">
+            <thead>
+              <tr><th style="width:60px">No</th><th>Jabatan</th><th style="width:140px">Jumlah (Orang)</th></tr>
+            </thead>
+            <tbody>` +
+            manpower.map((m,i)=>`<tr><td>${i+1}</td><td>${m}</td><td>0</td></tr>`).join('') +
+            `</tbody>
+          </table>
+        </div>`;
+    }
+
+    function showContent(section){
+      const content = document.getElementById('content');
+      if(section === 'schedule'){
+        content.innerHTML = `<h3>Schedule</h3><img src="images/schedule.jpg" alt="Kurva S">`;
+      } else if(section === 'progress'){
+        content.innerHTML = buildProgressHTML();
+      } else if(section === 'stock'){
+        content.innerHTML = buildStockHTML();
+      } else if(section === 'plan'){
+        content.innerHTML = `<h3>Plan</h3>
+        <img src="images/1.jpg" alt="Rencana 1">`;
+      } else if(section === 'question'){
+        content.innerHTML = `<h3>Submit Your Question</h3>
+          <p>Silakan tuliskan pertanyaan atau masukan Anda terkait proyek ini.</p>
+          <textarea placeholder="Tulis pertanyaan di sini..."></textarea>`;
+      } else if(section === 'profile'){
+        content.innerHTML = `<h3>Profile</h3><p>Informasi profil proyek akan ditampilkan di sini.</p>`;
+      } else if(section === 'manpower'){
+        content.innerHTML = buildManpowerHTML();
+      } else if(section === 'seeall'){
+        content.innerHTML = `<h3>All Categories</h3><p>Daftar lengkap menu proyek akan muncul di sini.</p>`;
+      } else {
+        content.innerHTML = `<p>Kategori ini belum aktif.</p>`;
+      }
+      // keep scroll at top of content when switching
+      content.scrollTop = 0;
+    }
+
+    // optional: show home content on load (unchanged)
+    document.addEventListener('DOMContentLoaded', ()=> {
+      document.getElementById('content').innerHTML = `<p>Pilih salah satu kategori di atas untuk melihat konten.</p>`;
+    });
+  </script>
+  <footer id="main-footer">
+      <p>&copy; 2025 Proyek RSUD Kabupaten Kediri. All rights reserved.</p>
+      <p>Dikelola oleh Tim JC UGM | Versi 1.0</p>
+    </footer>
+  </body>
+</html>
+</body>
+</html>
